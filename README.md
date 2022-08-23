@@ -1,4 +1,4 @@
-# Acortador de URLs ![Directus](https://img.shields.io/badge/directus-%2364f.svg?style=for-the-badge&logo=directus&logoColor=white) 
+# Acortador de URLs ![Directus](https://img.shields.io/badge/directus-%2364f.svg?style=for-the-badge&logo=directus&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 
 Creación de una aplicación de pruebas para acortar URLs. 
 
@@ -70,4 +70,26 @@ npm run build
 
 **NOTA:** Para que Directus ejecute el código generado, se deberá copiar la carpeta creada y todo su contenido y pegarla en la carpeta hooks del proyecto.
 
+## Casos de uso
+
+1. [**CU-01**] Creación de un nuevo registro en la tabla de la base de datos a través de una petición vía API Rest.
+2. [**CU-02**] Creación de un string aleatorio de 7 caracteres para usarlo como URL acortada.
+3. [**CU-03**] Actualización del registro creado anteriormente con la nueva URL.
+4. [**CU-04**] Solicitud 301 de redirección, con la url acortada
+
+### [CU-01] - Solicitud API Rest 
+
+Solicitud a la API Rest de Directus mediante el método POST usando **Postman**.
+
+Endpoint
+
+```console
+http://localhost:8055/items/<nombre de la coleccion>
+```
+
+Body en JSON
+
+```console
+{"URL": "https://..."}
+```
 
