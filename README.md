@@ -11,7 +11,7 @@ Creación de una aplicación de pruebas para acortar URLs.
 - Al realizar la petición:
     - Se almacenará la URL original
     - Se creará y almacenará la nueva URL acortada (*7 caracteres*) en el registro anteriormente creado
-    - Se hará la redirección de la nueva URL a la URL original
+    - Se hará la redirección de la URL corta a la URL original
 
 ## Primero pasos
 
@@ -73,7 +73,7 @@ npm run build
 ## Casos de uso
 
 1. [**CU-01**] Creación de un nuevo registro en la tabla de la base de datos a través de una petición vía API Rest.
-2. [**CU-02**] Creación de un string aleatorio de 7 caracteres para usarlo como URL acortada.
+2. [**CU-02**] Creación de un string aleatorio de 7 caracteres para usarlo como URL corta.
 3. [**CU-03**] Actualización del registro creado anteriormente con la nueva URL.
 4. [**CU-04**] Solicitud 301 de redirección, con la url acortada
 
@@ -81,15 +81,50 @@ npm run build
 
 Solicitud a la API Rest de Directus mediante el método POST usando **Postman**.
 
-Endpoint
+**Endpoint**
 
 ```console
 http://localhost:8055/items/<nombre de la coleccion>
 ```
 
-Body en JSON
+**Body en JSON**
 
 ```console
 {"URL": "https://..."}
 ```
 
+### [CU-02] - Creación de la URL acortada 
+
+Creación un nuevo archivo llamado `shortUrl.js` para generar un número aleatorio de 7 caracteres alfanuméricos.
+
+```javascript
+export const shortUrl = () => Math.random().toString(36).substr(2, 7)
+```
+
+### [CU-03] - Creación del custom hook 
+
+Creación de una extensión personalizada para poder acortar las URLs que se soliciten a Directus vía Postman.
+
+**Entrypoint**
+
+```console
+extensions > hooks > <nombre de la extensión> > index.js
+```
+
+**Función de registro**
+
+```javascript
+export default ({ action }, { services, getSchema, exceptions }) => {}
+```
+
+**Evento**
+
+```javascript
+action('messages.items.create', async (input, { database }) => {}
+```
+
+**Actualización del registro**
+
+```javascript
+await recordService.updateOne(input.key, {URL_short: shortURL});
+```
