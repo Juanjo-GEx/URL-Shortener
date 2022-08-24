@@ -131,5 +131,24 @@ await recordService.updateOne(input.key, {URL_short: shortURL});
 
 ### [CU-04] - Redireccionamiento
 
-Al tenerse que realizar la redirección en la parte back del servidor y no en la parte front del cliente, queda pendiente de implementación.
+```diff
+- ¡PENDIENTE DE IMPLEMENTACIÓN!
+```
+> **NOTA:** Al tenerse que realizar la redirección en la parte back del servidor y no en la parte front del cliente, queda pendiente de implementación.
+
+## Vídeo de funcionamiento
+
+A continuación, se muestra un pequeño vídeo del proceso de generación de una URL corta en **Directus** a partir de una solicitud API Rest con **Postman**.
+
+[Vídeo Acortador URLs en Directus](https://www.loom.com/share/046178926ab54516acd4d8698269db56)
+
+## Construido con...
+
+* [Directus](https://docs.directus.io/) - Usado como API y gestor de bases de datos
+* [Postman](https://learning.postman.com/docs/getting-started/introduction/) - Usado para la realización de peticiones API Rest
+* [JavaScript](https://devdocs.io/javascript/) - Usado para la creación del custom hook
+
+## Documentación
+
+La documentación del proyecto se puede consultar en la carpeta correspondiente.
 
