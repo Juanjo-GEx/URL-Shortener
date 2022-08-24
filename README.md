@@ -128,3 +128,8 @@ action('messages.items.create', async (input, { database }) => {}
 ```javascript
 await recordService.updateOne(input.key, {URL_short: shortURL});
 ```
+
+### [CU-04] - Redireccionamiento
+
+Al tenerse que realizar la redirección en la parte back del servidor y no en la parte front del cliente, queda pendiente de implementación.
+
