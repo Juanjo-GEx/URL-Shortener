@@ -10,7 +10,7 @@ Creación de una aplicación de pruebas para acortar URLs.
 - La solicitud para acortar la URL de entrada se realizará mediante **Postman**.
 - Al realizar la petición:
     - Se almacenará la URL original
-    - Se creará y almacenará la nueva URL acortada (*7 caracteres*) en el registro anteriormente creado
+    - Se creará, validará y almacenará la nueva URL corta (*5 caracteres*) en el registro anteriormente creado
     - Se hará la redirección de la URL corta a la URL original
 
 ## Primero pasos
@@ -95,10 +95,12 @@ http://localhost:8055/items/<nombre de la coleccion>
 
 ### [CU-02] - Creación de la URL acortada 
 
-Creación un nuevo archivo llamado `shortUrl.js` para generar un número aleatorio de 7 caracteres alfanuméricos.
+Creación de una función llamada `generateURL` que creará un número aleatorio de 5 caracteres alfanuméricos.
 
 ```javascript
-export const shortUrl = () => Math.random().toString(36).substr(2, 7)
+const generateURL = () => {
+	return Math.random().toString(36).substr(2, 5)
+}
 ```
 
 ### [CU-03] - Creación del custom hook 
