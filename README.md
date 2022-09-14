@@ -11,6 +11,7 @@ Creación de una aplicación de pruebas para acortar URLs.
 - Al realizar la petición:
     - Se almacenará la URL original
     - Se creará, validará y almacenará la nueva URL corta (*5 caracteres*) en el registro anteriormente creado
+    - Se creará un objeto de tipo File en el S3 de Amazon con los metadatos de la redirección.	
     - Se hará la redirección de la URL corta a la URL original
 
 ## Primero pasos
@@ -73,9 +74,10 @@ npm run build
 ## Casos de uso
 
 1. [**CU-01**] Creación de un nuevo registro en la tabla de la base de datos a través de una petición vía API Rest.
-2. [**CU-02**] Creación de un string aleatorio de 7 caracteres para usarlo como URL corta.
-3. [**CU-03**] Actualización del registro creado anteriormente con la nueva URL.
-4. [**CU-04**] Solicitud 301 de redirección, con la url acortada
+2. [**CU-02**] Creación de un string aleatorio de 5 caracteres para usarlo como URL corta.
+3. [**CU-03**] Actualización del registro creado anteriormente con la nueva URL y creación de un objeto File con los metadatos de la redirección
+4. [**CU-04**] Almacenamiento del objeto File en el s3 de Amazon
+5. [**CU-05**] Solicitud 301 de redirección, con la url acortada
 
 ### [CU-01] - Solicitud API Rest 
 
@@ -122,27 +124,57 @@ export default ({ action }, { services, getSchema, exceptions }) => {}
 **Evento**
 
 ```javascript
-action('messages.items.create', async (input, { database }) => {}
+action('urls.items.create', async (input, { accountability }) => {}
 ```
 
 **Actualización del registro**
 
 ```javascript
-await recordService.updateOne(input.key, {URL_short: shortURL});
+//Creación automática
+await recordService.updateOne(input.key, {slug: shortURL, redirection: fileObject});
+//Creación manual
+await filesService.updateOne(input.payload.redirection, {"metadata": {"x-amz-website-redirect-location": `${endsToSlash(input.payload.domain)}${input.payload.slug}`}});
 ```
 
-### [CU-04] - Redireccionamiento
+### [CU-04] - S3 Amazon
+De forma predeterminada, Directus almacena todos los archivos cargados localmente en el disco. Sin embargo, también podemos configurar Directus para usar S3.
+
+#### Setup AWS
+- Bucket: `...`
+- Grupo de usuarios: `...`
+- Usuario: `...`
+- ID: `...`
+- Clave: `...`
+
+#### Setup AWS
+
+```console
+STORAGE_LOCATIONS:"s3"
+STORAGE_S3_DRIVER:"s3"
+STORAGE_ S3_KEY:"..."
+STORAGE_ S3_SECRET:"..."
+STORAGE_ S3_BUCKET:"..."
+STORAGE_ S3_REGION:"eu-central-1"
+STORAGE_ S3_ENDPOINT:"s3.amazonws.com"
+```
+
+#### Vídeos funcionamiento
+
+**Conexión automática con s3**
+Directus guardar automáticamente el objeto de tipo File en S3 cuando se realiza una solicitud vía API Rest.
+[Vídeo Conexión automática con s3](https://www.loom.com/share/4c777e8ac3f5484c971c5db62152f605)
+
+**Conexión manual con s3**
+Se ha creado un nuevo registro manualmente a través de la interfaz de Directus y el archivo se guarda correctamente en el storage de Amazon.
+[Vídeo Conexión manual con s3](https://www.loom.com/share/af7f83708a0540a59ba1fba4778bd746)
+
+### [CU-05] - Redireccionamiento
 
 ```diff
 - ¡PENDIENTE DE IMPLEMENTACIÓN!
 ```
-> **NOTA:** Al tenerse que realizar la redirección en la parte back del servidor y no en la parte front del cliente, queda pendiente de implementación.
 
-## Vídeo de funcionamiento
-
-A continuación, se muestra un pequeño vídeo del proceso de generación de una URL corta en **Directus** a partir de una solicitud API Rest con **Postman**.
-
-[Vídeo Acortador URLs en Directus](https://www.loom.com/share/046178926ab54516acd4d8698269db56)
+> **NOTA:** El S3 de Amazon no guarda los metadatos de la redirección.
 
 ## Construido con...
 
@@ -153,4 +185,3 @@ A continuación, se muestra un pequeño vídeo del proceso de generación de una
 ## Documentación
 
 La documentación del proyecto se puede consultar en la carpeta correspondiente.
-
